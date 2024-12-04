@@ -1,7 +1,5 @@
 package org.example.springnewbie;
 
-import org.springframework.web.bind.annotation.RestController;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
