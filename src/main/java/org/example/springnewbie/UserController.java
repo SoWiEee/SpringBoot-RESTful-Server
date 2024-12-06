@@ -2,14 +2,14 @@ package org.example.springnewbie;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
+@RestController
 public class UserController {
     private Map<String, User> userDB = new HashMap<>();
 
@@ -22,20 +22,20 @@ public class UserController {
 
         // check input
         if(name==null || email==null || passwd==null){
-            rsp.put("status", 31);
-            rsp.put("message", "[X] Missing parameters");
+            rsp.put("rsp_code", 31);
+            rsp.put("rsp_msg", "[X] Missing parameters");
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
         if(userDB.containsKey(email)){
-            rsp.put("status", 21);
-            rsp.put("message", "[X] User already exists");
+            rsp.put("rsp_code", 21);
+            rsp.put("rsp_msg", "[X] User already exists");
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
         try{
             passwd = User.hashPasswd(passwd);
         } catch (NoSuchAlgorithmException e) {
-            rsp.put("status", 30);
-            rsp.put("message", "[X] Incorrect parameters");
+            rsp.put("rsp_code", 30);
+            rsp.put("rsp_msg", "[X] Incorrect parameters");
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
 
@@ -46,4 +46,5 @@ public class UserController {
         rsp.put("rsp_msg", "[V] Update Successful");
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
+
 }
