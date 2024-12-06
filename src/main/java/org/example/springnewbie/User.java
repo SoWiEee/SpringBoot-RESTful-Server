@@ -17,14 +17,18 @@ public class User {
     public String getEmail() { return email; }
     public String getName() { return name; }
 
-    public static String hashPasswd(String passwd) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        md.update(passwd.getBytes());
-        byte[] digest = md.digest();
-        StringBuilder sb = new StringBuilder();
-        for(byte b : digest){
-            sb.append(String.format("%02x", b));
+    public static String hashPasswd(String passwd){
+        try{
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(passwd.getBytes());
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for(byte b : digest){
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch(NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
-        return sb.toString();
     }
 }
