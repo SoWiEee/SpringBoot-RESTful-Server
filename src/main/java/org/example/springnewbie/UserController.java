@@ -86,4 +86,60 @@ public class UserController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
+    @PutMapping("/fix_user")
+    public ResponseEntity<Map<String, Object>> fixUser(@RequestBody Map<String, String> updateData, @RequestHeader("TimeStamp") String timeStamp, @RequestHeader("email") String email){
+        Map<String, Object> rsp = new HashMap<>();
+
+        if(email==null || email.isEmpty()){
+            rsp.put("rsp_code", 31);
+            rsp.put("rsp_msg", "[X] Missing parameters");
+            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+        }
+        // check params
+        Pattern p = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+        if (!p.matcher(email).matches()) {
+            rsp.put("rsp_code", 30);
+            rsp.put("rsp_msg", "[X] Incorrect parameters");
+            rsp.put("data", null);
+            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userDB.get(email);
+
+        if(user==null){
+            rsp.put("rsp_code", 40);
+            rsp.put("rsp_msg", "[X] Email not found");
+            rsp.put("data", null);
+            return new ResponseEntity<>(rsp, HttpStatus.NOT_FOUND);
+        }
+
+        String newName = updateData.get("new_name");
+        String newEmail = updateData.get("new_email");
+        String password = updateData.get("passwd");
+        String truePasswd = user.getPasswd();
+
+        try {
+            if (password == null || password.isEmpty() || !User.hashPasswd(password).equals(truePasswd)) {
+                rsp.put("rsp_code", 50);
+                rsp.put("rsp_msg", "[X] Incorrect password");
+                return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            rsp.put("rsp_code", 30);
+            rsp.put("rsp_msg", "[X] Incorrect parameters");
+            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+        }
+
+        // 更新用戶信息
+        if (newName != null && !newName.isEmpty()) {
+            user.setName(newName);
+        }
+        if (newEmail != null && !newEmail.isEmpty()) {
+            user.setEmail(newEmail);
+        }
+        rsp.put("rsp_code", 20);
+        rsp.put("rsp_msg", "[V] Fix Successful");
+        //rsp.put("data", user);
+        return new ResponseEntity<>(rsp, HttpStatus.OK);
+    }
 }
