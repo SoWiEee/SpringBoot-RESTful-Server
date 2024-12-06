@@ -13,6 +13,10 @@ public class User {
         this.passwd = passwd;
     }
 
+    // getter & setter
+    public String getEmail() { return email; }
+    public String getName() { return name; }
+
     public static String hashPasswd(String passwd) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(passwd.getBytes());
