@@ -40,10 +40,10 @@ public class UserController {
         }
 
         User newUser =  new User(name, email, passwd);
-        userDB.put(email, newUser);
 
         rsp.put("rsp_code", 20);
         rsp.put("rsp_msg", "[V] Update Successful");
+        userDB.put(email, newUser);
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
@@ -136,7 +136,12 @@ public class UserController {
         }
         if (newEmail != null && !newEmail.isEmpty()) {
             user.setEmail(newEmail);
+            userDB.remove(email);
+            userDB.put(newEmail, user);
+        }else{
+            userDB.put(email, user);
         }
+
         rsp.put("rsp_code", 20);
         rsp.put("rsp_msg", "[V] Fix Successful");
         return new ResponseEntity<>(rsp, HttpStatus.OK);
@@ -187,6 +192,7 @@ public class UserController {
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
 
+        userDB.remove(email);
         rsp.put("rsp_code", 20);
         rsp.put("rsp_msg", "[V] Delete Successful");
         return new ResponseEntity<>(rsp, HttpStatus.OK);
