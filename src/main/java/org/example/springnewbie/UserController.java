@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping("/add_user")
-    public ResponseEntity<Map<String, Object>> addUser(@RequestBody Map<String, String> user, @RequestHeader("TimeStamp") String timeStamp){
+    public ResponseEntity<Map<String, Object>> addUser(@RequestBody Map<String, String> user) {
         Map<String, Object> rsp = new HashMap<>();
         String name = user.get("name");
         String email = user.get("email");
@@ -54,7 +54,7 @@ public class UserController {
 
     @GetMapping("/get_user")
     // user email to fetch user
-    public ResponseEntity<Map<String, Object>> getUser(@RequestHeader("TimeStamp") String timeStamp, @RequestHeader("email") String email){
+    public ResponseEntity<Map<String, Object>> getUser(@RequestHeader("email") String email){
         Map<String, Object> rsp = new HashMap<>();
 
         if(email==null || email.isEmpty()){
@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @PutMapping("/fix_user")
-    public ResponseEntity<Map<String, Object>> fixUser(@RequestBody Map<String, String> updateData, @RequestHeader("TimeStamp") String timeStamp, @RequestHeader("email") String email){
+    public ResponseEntity<Map<String, Object>> fixUser(@RequestBody Map<String, String> updateData, @RequestHeader("email") String email){
         Map<String, Object> rsp = new HashMap<>();
 
         if(email==null || email.isEmpty()){
@@ -151,7 +151,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete_user")
-    public ResponseEntity<Map<String, Object>> deleteUser(@RequestHeader Map<String, String> updateData, @RequestHeader("TimeStamp") String timeStamp){
+    public ResponseEntity<Map<String, Object>> deleteUser(@RequestHeader Map<String, String> updateData){
         Map<String, Object> rsp = new HashMap<>();
         String email = updateData.get("email");
 
