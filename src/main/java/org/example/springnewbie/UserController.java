@@ -13,6 +13,11 @@ import java.util.regex.Pattern;
 public class UserController {
     private Map<String, User> userDB = new HashMap<>();
 
+    private boolean isEmailValid(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        return Pattern.compile(emailRegex).matcher(email).matches();
+    }
+
     @PostMapping("/add_user")
     public ResponseEntity<Map<String, Object>> addUser(@RequestBody Map<String, String> user, @RequestHeader("TimeStamp") String timeStamp){
         Map<String, Object> rsp = new HashMap<>();
@@ -58,9 +63,8 @@ public class UserController {
             rsp.put("data", null);
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        Pattern p = Pattern.compile(emailRegex);
-        if (!p.matcher(email).matches()) {
+
+        if (!isEmailValid(email)) {
             rsp.put("rsp_code", 30);
             rsp.put("rsp_msg", "[X] Incorrect parameters");
             rsp.put("data", null);
@@ -95,9 +99,8 @@ public class UserController {
             rsp.put("rsp_msg", "[X] Missing parameters");
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
-        // check params
-        Pattern p = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-        if (!p.matcher(email).matches()) {
+
+        if (!isEmailValid(email)) {
             rsp.put("rsp_code", 30);
             rsp.put("rsp_msg", "[X] Incorrect parameters");
             rsp.put("data", null);
@@ -158,9 +161,8 @@ public class UserController {
             rsp.put("rsp_msg", "[X] Missing parameters");
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
-        // ok
-        Pattern p = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-        if (!p.matcher(email).matches()) {
+
+        if (!isEmailValid(email)) {
             rsp.put("rsp_code", 30);
             rsp.put("rsp_msg", "[X] Incorrect parameters");
             rsp.put("data", null);
@@ -169,7 +171,6 @@ public class UserController {
 
         User user = userDB.get(email);
 
-        // ok
         if(user==null){
             rsp.put("rsp_code", 40);
             rsp.put("rsp_msg", "[X] Email not found");
