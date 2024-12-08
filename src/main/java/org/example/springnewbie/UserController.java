@@ -54,7 +54,7 @@ public class UserController {
 
     @GetMapping("/v1/user/get_user")
     // user email to fetch user
-    public ResponseEntity<Map<String, Object>> getUser(@RequestHeader("email") String email){
+    public ResponseEntity<Map<String, Object>> getUser(@RequestHeader(value = "email", required = false) String email){
         Map<String, Object> rsp = new HashMap<>();
 
         if(email==null || email.isEmpty()){
@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @PutMapping("/v1/user/fix_user")
-    public ResponseEntity<Map<String, Object>> fixUser(@RequestBody Map<String, String> updateData, @RequestHeader("email") String email){
+    public ResponseEntity<Map<String, Object>> fixUser(@RequestBody Map<String, String> updateData, @RequestHeader(value = "email", required = false) String email){
         Map<String, Object> rsp = new HashMap<>();
 
         if(email==null || email.isEmpty()){
@@ -178,7 +178,7 @@ public class UserController {
             return new ResponseEntity<>(rsp, HttpStatus.NOT_FOUND);
         }
 
-        String password = updateData.get("passwd");
+        String password = updateData.get("password");
         String truePasswd = user.getPasswd();
 
         try {
