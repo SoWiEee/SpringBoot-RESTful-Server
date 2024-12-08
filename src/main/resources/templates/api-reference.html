@@ -11,7 +11,7 @@
         <div>Add a new user. Requires name, email, and password in the request body.</div>
 
         <h2><u>Request</u></h2>
-        <p><b>POST</b> /v1/add_user</p>
+        <p><b>POST</b> /v1/user/add_user</p>
         <p><b>Body - </b> { "name": "String", "e-mail": "String", "password": "Hashed String, MD5" }</p>
 
         <h2><u>Response</u></h2>
@@ -28,7 +28,7 @@
         <h1>Get User</h1>
         <div>Retrieve user information using the email provided in the request header.</div>
         <h2><u>Request</u></h2>
-        <p><b>GET</b> /v1/get_user</p>
+        <p><b>GET</b> /v1/user/get_user</p>
         <p><b>Header - </b> Email of user</p>
 
         <h2><u>Response</u></h2>
@@ -49,7 +49,7 @@
         <h1>Fix User</h1>
         <div>Update user information. Requires email in the request header and new data in the request body.</div>
         <h2><u>Request</u></h2>
-        <p><b>PUT</b> /v1/fix_user</p>
+        <p><b>PUT</b> /v1/user/fix_user</p>
         <p><b>Header - </b> Email of updated user</p>
         <p><b>Body - </b>
             {
@@ -72,7 +72,7 @@
         <h1>Delete User</h1>
         <div>Delete a user. Requires email and password in the request header.</div>
         <h2><u>Request</u></h2>
-        <p><b>DELETE</b> /v1/delete_user</p>
+        <p><b>DELETE</b> /v1/user/delete_user</p>
         <p><b>Header - </b> Email of deleted user, Password of deleted user</p>
 
         <h2><u>Response</u></h2>

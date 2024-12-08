@@ -18,15 +18,15 @@ public class UserController {
         return Pattern.compile(emailRegex).matcher(email).matches();
     }
 
-    @PostMapping("/v1/add_user")
+    @PostMapping("/v1/user/add_user")
     public ResponseEntity<Map<String, Object>> addUser(@RequestBody Map<String, String> user) {
         Map<String, Object> rsp = new HashMap<>();
         String name = user.get("name");
-        String email = user.get("email");
-        String passwd = user.get("passwd");
+        String email = user.get("e-mail");
+        String password = user.get("password");
 
         // check input
-        if(name==null || email==null || passwd==null){
+        if(name==null || email==null || password==null){
             rsp.put("rsp_code", 31);
             rsp.put("rsp_msg", "[X] Missing parameters");
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
@@ -37,14 +37,14 @@ public class UserController {
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
         try{
-            passwd = User.hashPasswd(passwd);
+            password = User.hashPasswd(password);
         } catch(NoSuchAlgorithmException e) {
             rsp.put("rsp_code", 30);
             rsp.put("rsp_msg", "[X] Incorrect parameters");
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
 
-        User newUser =  new User(name, email, passwd);
+        User newUser =  new User(name, email, password);
 
         rsp.put("rsp_code", 20);
         rsp.put("rsp_msg", "[V] Update Successful");
@@ -52,7 +52,7 @@ public class UserController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
-    @GetMapping("/v1/get_user")
+    @GetMapping("/v1/user/get_user")
     // user email to fetch user
     public ResponseEntity<Map<String, Object>> getUser(@RequestHeader("email") String email){
         Map<String, Object> rsp = new HashMap<>();
@@ -90,7 +90,7 @@ public class UserController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
-    @PutMapping("/v1/fix_user")
+    @PutMapping("/v1/user/fix_user")
     public ResponseEntity<Map<String, Object>> fixUser(@RequestBody Map<String, String> updateData, @RequestHeader("email") String email){
         Map<String, Object> rsp = new HashMap<>();
 
@@ -117,8 +117,8 @@ public class UserController {
         }
 
         String newName = updateData.get("new_name");
-        String newEmail = updateData.get("new_email");
-        String password = updateData.get("passwd");
+        String newEmail = updateData.get("new_e-mail");
+        String password = updateData.get("password");
         String truePasswd = user.getPasswd();
 
         try {
@@ -150,7 +150,7 @@ public class UserController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
-    @DeleteMapping("/v1/delete_user")
+    @DeleteMapping("/v1/user/delete_user")
     public ResponseEntity<Map<String, Object>> deleteUser(@RequestHeader Map<String, String> updateData){
         Map<String, Object> rsp = new HashMap<>();
         String email = updateData.get("email");
