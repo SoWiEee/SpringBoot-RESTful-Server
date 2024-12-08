@@ -18,7 +18,7 @@ public class UserController {
         return Pattern.compile(emailRegex).matcher(email).matches();
     }
 
-    @PostMapping("/add_user")
+    @PostMapping("/v1/add_user")
     public ResponseEntity<Map<String, Object>> addUser(@RequestBody Map<String, String> user) {
         Map<String, Object> rsp = new HashMap<>();
         String name = user.get("name");
@@ -52,7 +52,7 @@ public class UserController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
-    @GetMapping("/get_user")
+    @GetMapping("/v1/get_user")
     // user email to fetch user
     public ResponseEntity<Map<String, Object>> getUser(@RequestHeader("email") String email){
         Map<String, Object> rsp = new HashMap<>();
@@ -90,7 +90,7 @@ public class UserController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
-    @PutMapping("/fix_user")
+    @PutMapping("/v1/fix_user")
     public ResponseEntity<Map<String, Object>> fixUser(@RequestBody Map<String, String> updateData, @RequestHeader("email") String email){
         Map<String, Object> rsp = new HashMap<>();
 
@@ -150,7 +150,7 @@ public class UserController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete_user")
+    @DeleteMapping("/v1/delete_user")
     public ResponseEntity<Map<String, Object>> deleteUser(@RequestHeader Map<String, String> updateData){
         Map<String, Object> rsp = new HashMap<>();
         String email = updateData.get("email");
