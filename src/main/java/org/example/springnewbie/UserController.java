@@ -14,7 +14,7 @@ public class UserController {
     private Map<String, User> userDB = new HashMap<>();
 
     private boolean isEmailValid(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        String emailRegex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         return Pattern.compile(emailRegex).matcher(email).matches();
     }
 
