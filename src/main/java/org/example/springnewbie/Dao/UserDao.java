@@ -21,6 +21,7 @@ public class UserDao {
 
     public void addUser(User user) {
         String sql = "INSERT INTO User(name, email, password) VALUES (:name, :email, :password)";
+        
         Map<String, Object> params = new HashMap<>();
         params.put("name", user.getName());
         params.put("email", user.getEmail());
@@ -32,6 +33,7 @@ public class UserDao {
         String sql = "SELECT * FROM User WHERE email = :email";
         Map<String, Object> params = new HashMap<>();
         params.put("email", email);
+
         return namedParameterJdbcTemplate.queryForObject(sql, params, UserRowMapper);
     }
 

@@ -16,7 +16,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // ok
     @PostMapping("/post/add_user")
     public ResponseEntity<Map<String, Object>> addUser(@RequestBody @Valid User user) {
         Map<String, Object> rsp = new HashMap<>();
@@ -41,7 +40,6 @@ public class UserController {
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
-    // ok ?
     @GetMapping("/get/get_user")
     public ResponseEntity<Map<String, Object>> getUser(@RequestHeader("email") @Valid String email) {
         Map<String, Object> rsp = new HashMap<>();
@@ -52,10 +50,10 @@ public class UserController {
             rsp.put("data", null);
             return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
         }
-        // 把資料做成 response
+
         User user = userService.getUserByEmail(email);
 
-        // email exist - ok
+        // email exist
         if (user == null) {
             rsp.put("rsp_code", 40);
             rsp.put("rsp_msg", "[X] Email not found");
@@ -63,7 +61,7 @@ public class UserController {
             return new ResponseEntity<>(rsp, HttpStatus.NOT_FOUND);
         }
 
-        // success !
+        // success
         rsp.put("rsp_code", 20);
         rsp.put("rsp_msg", "[V] Fetch Successful");
         rsp.put("data", user);
@@ -125,7 +123,7 @@ public class UserController {
         }
 
         String password = userData.get("password");
-        String truePasswd = user.getPasswd();
+        String truePasswd = User.hashPasswd(user.getPasswd());
 
         if (password == null || password.isEmpty() || !User.hashPasswd(password).equals(truePasswd)) {
             rsp.put("rsp_code", 30);
