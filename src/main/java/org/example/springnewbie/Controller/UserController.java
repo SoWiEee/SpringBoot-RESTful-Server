@@ -84,6 +84,7 @@ public class UserController {
         }
 
         rsp.SUCCESS();
+        userService.fixUser(user);
         return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.OK);
     }
 
