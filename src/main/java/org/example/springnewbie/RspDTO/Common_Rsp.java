@@ -17,6 +17,11 @@ public class Common_Rsp {
         this.rsp_msg = "Missing parameters";
     }
 
+    public void PARAMS_INCORRECT(){
+        this.rsp_code = 30;
+        this.rsp_msg = "Incorrect parameters";
+    }
+
     public void PASSWD_INCORRECT(){
         this.rsp_code = 30;
         this.rsp_msg = "Incorrect password";
