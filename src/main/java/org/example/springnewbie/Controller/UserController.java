@@ -1,10 +1,12 @@
 package org.example.springnewbie.Controller;
 
+import com.google.gson.Gson;
 import jakarta.validation.Valid;
 import org.example.springnewbie.DTO.UserDTO;
 import org.example.springnewbie.Mapper.AddUserDTO_Mapper;
 import org.example.springnewbie.ReqDTO.AddUserDTO;
 import org.example.springnewbie.RspDTO.Common_Rsp;
+import org.example.springnewbie.RspDTO.GetUser_rsp;
 import org.example.springnewbie.Service.UserService;
 import org.example.springnewbie.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,84 +23,66 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private static final Gson GSON = new Gson();
+
     @PostMapping("/post/add_user")
-    public Common_Rsp addUser(@RequestBody AddUserDTO req) {
+    public ResponseEntity addUser(@RequestBody AddUserDTO req) {
         Common_Rsp rsp = new Common_Rsp();
         AddUserDTO_Mapper mapper = new AddUserDTO_Mapper();
 
         if(req.isEmpty()){
             rsp.PARAMS_MISSING();
-            return rsp;
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.BAD_REQUEST);
         }else if(userService.getUserByEmail(req.getEmail()) != null){
             rsp.USER_EXISTED();
-            return rsp;
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.BAD_REQUEST);
         }else{
             UserDTO userDTO = mapper.Mapping(req);
             userService.addUser(userDTO);
             rsp.SUCCESS();
-            return rsp;
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.OK);
         }
     }
 
     @GetMapping("/get/get_user")
-    public ResponseEntity<Map<String, Object>> getUser(@RequestHeader("email") @Valid String email) {
-        Map<String, Object> rsp = new HashMap<>();
+    public ResponseEntity getUser(@RequestHeader("email") @Valid String email) {
+        GetUser_rsp rsp = new GetUser_rsp();
 
         if (email == null || email.isEmpty()) {
-            rsp.put("rsp_code", 31);
-            rsp.put("rsp_msg", "[X] Missing parameters");
-            rsp.put("data", null);
-            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+            rsp.PARAMS_MISSING();
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.BAD_REQUEST);
         }
 
-        User user = userService.getUserByEmail(email);
+        UserDTO user = userService.getUserByEmail(email);
 
-        // email exist
         if (user == null) {
-            rsp.put("rsp_code", 40);
-            rsp.put("rsp_msg", "[X] Email not found");
-            rsp.put("data", null);
-            return new ResponseEntity<>(rsp, HttpStatus.NOT_FOUND);
+            rsp.EMAIL_NOT_FOUND();
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.NOT_FOUND);
         }
 
-        // success
-        rsp.put("rsp_code", 20);
-        rsp.put("rsp_msg", "[V] Fetch Successful");
-        rsp.put("data", user);
+        rsp.SUCCESS();
+        rsp.setData(user);
         return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
     @PutMapping("/put/fix_user")
-    public ResponseEntity<Map<String, Object>> fixUser(@RequestBody @Valid User user, @RequestHeader String email) {
-        Map<String, Object> rsp = new HashMap<>();
+    public ResponseEntity fixUser(@RequestBody @Valid User user, @RequestHeader String email) {
+        Common_Rsp rsp = new Common_Rsp();
 
-        // check input - ok
         if(email==null){
-            rsp.put("rsp_code", 31);
-            rsp.put("rsp_msg", "[X] Missing parameters");
-            rsp.put("data", null);
-            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+            rsp.PARAMS_MISSING();
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.BAD_REQUEST);
         }
 
-        User updatedUser = userService.getUserByEmail(user.getEmail());
+        UserDTO updatedUser = userService.getUserByEmail(user.getEmail());
 
-        // email exist - ok
         if(updatedUser==null){
-            rsp.put("rsp_code", 40);
-            rsp.put("rsp_msg", "[X] Email not found");
-            rsp.put("data", null);
-            return new ResponseEntity<>(rsp, HttpStatus.NOT_FOUND);
+            rsp.EMAIL_NOT_FOUND();
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.NOT_FOUND);
         }
 
-        // success !
-        Map<String, String> userData = new HashMap<>();
-        userData.put("name", user.getName());
-        userData.put("email", user.getEmail());
-
-        rsp.put("rsp_code", 20);
-        rsp.put("rsp_msg", "[V] Fetch Successful");
-        rsp.put("data", userData);
-        return new ResponseEntity<>(rsp, HttpStatus.OK);
+        rsp.SUCCESS();
+        return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/delete_user")
