@@ -1,6 +1,10 @@
 package org.example.springnewbie.Controller;
 
 import jakarta.validation.Valid;
+import org.example.springnewbie.DTO.UserDTO;
+import org.example.springnewbie.Mapper.AddUserDTO_Mapper;
+import org.example.springnewbie.ReqDTO.AddUserDTO;
+import org.example.springnewbie.RspDTO.Common_Rsp;
 import org.example.springnewbie.Service.UserService;
 import org.example.springnewbie.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,33 +15,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController("/v1/user")
+@RestController
+@RequestMapping("/v1/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @PostMapping("/post/add_user")
-    public ResponseEntity<Map<String, Object>> addUser(@RequestBody @Valid User user) {
-        Map<String, Object> rsp = new HashMap<>();
+    public Common_Rsp addUser(@RequestBody AddUserDTO req) {
+        Common_Rsp rsp = new Common_Rsp();
+        AddUserDTO_Mapper mapper = new AddUserDTO_Mapper();
 
-        // check input - ok
-        if(user.getName()==null || user.getEmail()==null || user.getPasswd()==null){
-            rsp.put("rsp_code", 31);
-            rsp.put("rsp_msg", "[X] Missing parameters");
-            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+        if(req.isEmpty()){
+            rsp.PARAMS_MISSING();
+            return rsp;
+        }else if(userService.getUserByEmail(req.getEmail()) != null){
+            rsp.USER_EXISTED();
+            return rsp;
+        }else{
+            UserDTO userDTO = mapper.Mapping(req);
+            userService.addUser(userDTO);
+            rsp.SUCCESS();
+            return rsp;
         }
-        // check user exist - ok
-        if (userService.getUserByEmail(user.getEmail()) != null) {
-            rsp.put("rsp_code", 21);
-            rsp.put("rsp_msg", "[X] User already exists");
-            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
-        }
-
-        // success !
-        userService.addUser(user);
-        rsp.put("rsp_code", 20);
-        rsp.put("rsp_msg", "[V] Update Successful");
-        return new ResponseEntity<>(rsp, HttpStatus.OK);
     }
 
     @GetMapping("/get/get_user")
