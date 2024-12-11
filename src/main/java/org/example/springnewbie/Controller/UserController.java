@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.example.springnewbie.DTO.UserDTO;
 import org.example.springnewbie.Mapper.AddUserDTO_Mapper;
 import org.example.springnewbie.ReqDTO.AddUserDTO;
+import org.example.springnewbie.ReqDTO.DeleteUserDTO;
 import org.example.springnewbie.RspDTO.Common_Rsp;
 import org.example.springnewbie.RspDTO.GetUser_rsp;
 import org.example.springnewbie.Service.UserService;
@@ -86,38 +87,32 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/delete_user")
-    public ResponseEntity<Map<String, Object>> deleteUser(@RequestHeader Map<String, String> userData) {
-        Map<String, Object> rsp = new HashMap<>();
-        String email = userData.get("email");
+    public ResponseEntity deleteUser(@RequestHeader DeleteUserDTO req) {
+        Common_Rsp rsp = new Common_Rsp();
+        String email = req.getEmail();
+        String password = req.getPassword();
 
-        // ok
-        if(email==null || email.isEmpty()){
-            rsp.put("rsp_code", 31);
-            rsp.put("rsp_msg", "[X] Missing parameters");
-            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+        if(req.isEmpty()){
+            rsp.PARAMS_MISSING();
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.BAD_REQUEST);
         }
 
-        User user = userService.getUserByEmail(email);
+        UserDTO user = userService.getUserByEmail(email);
 
         if(user==null){
-            rsp.put("rsp_code", 40);
-            rsp.put("rsp_msg", "[X] Email not found");
-            rsp.put("data", null);
-            return new ResponseEntity<>(rsp, HttpStatus.NOT_FOUND);
+            rsp.EMAIL_NOT_FOUND();
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.NOT_FOUND);
         }
 
-        String password = userData.get("password");
-        String truePasswd = User.hashPasswd(user.getPasswd());
+        boolean passwdMatch = user.getPassword().equals(password);
 
-        if (password == null || password.isEmpty() || !User.hashPasswd(password).equals(truePasswd)) {
-            rsp.put("rsp_code", 30);
-            rsp.put("rsp_msg", "[X] Incorrect parameters");
-            return new ResponseEntity<>(rsp, HttpStatus.BAD_REQUEST);
+        if (!passwdMatch) {
+            rsp.PASSWD_INCORRECT();
+            return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.BAD_REQUEST);
         }
 
         userService.deleteUser(email);
-        rsp.put("rsp_code", 20);
-        rsp.put("rsp_msg", "[V] Delete Successful");
-        return new ResponseEntity<>(rsp, HttpStatus.OK);
+        rsp.SUCCESS();
+        return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.OK);
     }
 }
