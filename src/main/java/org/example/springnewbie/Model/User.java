@@ -3,16 +3,17 @@ package org.example.springnewbie.Model;
 import com.google.common.hash.Hashing;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.nio.charset.StandardCharsets;
 
 public class User {
 
-    @NotBlank
+    @NotNull
     public String name;
     @Email
     public String email;
-    @NotBlank
+    @NotNull
     public String password;     // SHA-256
 
     // getter & setter
