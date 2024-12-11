@@ -5,7 +5,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.example.springnewbie.DTO.UserDTO;
 import org.example.springnewbie.Mapper.AddUserDTO_Mapper;
 import org.example.springnewbie.ReqDTO.AddUserDTO;
-import org.example.springnewbie.ReqDTO.DeleteUserDTO;
 import org.example.springnewbie.ReqDTO.FixUserDTO;
 import org.example.springnewbie.RspDTO.Common_Rsp;
 import org.example.springnewbie.RspDTO.GetUser_rsp;
@@ -24,8 +23,6 @@ public class UserController {
     private UserService userService;
 
     private static final Gson GSON = new Gson();
-    @Autowired
-    private org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator emailValidator;
 
     @PostMapping("/post/add_user")
     public ResponseEntity addUser(@RequestBody AddUserDTO req) {
@@ -119,17 +116,16 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/delete_user")
-    public ResponseEntity deleteUser(@RequestHeader DeleteUserDTO req) {
+    public ResponseEntity deleteUser(@RequestHeader("email") String email, @RequestHeader String password) {
         Common_Rsp rsp = new Common_Rsp();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        String email = req.getEmail();
-        String password = req.getPassword();
+        EmailValidator validator = EmailValidator.getInstance();
 
-        if(req.isEmpty()){
+        if(email == null || password == null){
             rsp.PARAMS_MISSING();
             return new ResponseEntity<>(GSON.toJson(rsp), headers, HttpStatus.BAD_REQUEST);
-        }else if (!req.isEmailValid()){
+        }else if (!validator.isValid(email)){
             rsp.PARAMS_INCORRECT();
             return new ResponseEntity<>(GSON.toJson(rsp), headers, HttpStatus.BAD_REQUEST);
         }
