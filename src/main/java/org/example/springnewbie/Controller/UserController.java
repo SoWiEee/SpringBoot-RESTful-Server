@@ -6,6 +6,7 @@ import org.example.springnewbie.DTO.UserDTO;
 import org.example.springnewbie.Mapper.AddUserDTO_Mapper;
 import org.example.springnewbie.ReqDTO.AddUserDTO;
 import org.example.springnewbie.ReqDTO.DeleteUserDTO;
+import org.example.springnewbie.ReqDTO.FixUserDTO;
 import org.example.springnewbie.RspDTO.Common_Rsp;
 import org.example.springnewbie.RspDTO.GetUser_rsp;
 import org.example.springnewbie.Service.UserService;
@@ -67,10 +68,10 @@ public class UserController {
     }
 
     @PutMapping("/put/fix_user")
-    public ResponseEntity fixUser(@RequestBody @Valid User user, @RequestHeader String email) {
+    public ResponseEntity fixUser(@RequestBody FixUserDTO user, @RequestHeader String email) {
         Common_Rsp rsp = new Common_Rsp();
 
-        if(email==null){
+        if(email==null || user.isEmpty()){
             rsp.PARAMS_MISSING();
             return new ResponseEntity<>(GSON.toJson(rsp), HttpStatus.BAD_REQUEST);
         }
