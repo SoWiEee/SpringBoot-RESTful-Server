@@ -1,6 +1,7 @@
 package org.example.springnewbie.Controller;
 
 import com.google.gson.Gson;
+import jakarta.validation.Valid;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.example.springnewbie.DTO.UserDTO;
 import org.example.springnewbie.Mapper.AddUserDTO_Mapper;
@@ -25,7 +26,7 @@ public class UserController {
     private static final Gson GSON = new Gson();
 
     @PostMapping("/post/add_user")
-    public ResponseEntity addUser(@RequestBody AddUserDTO req) {
+    public ResponseEntity addUser(@RequestBody @Valid AddUserDTO req) {
         Common_Rsp rsp = new Common_Rsp();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -81,7 +82,7 @@ public class UserController {
     }
 
     @PutMapping("/put/fix_user")
-    public ResponseEntity fixUser(@RequestBody FixUserDTO user, @RequestHeader String email) {
+    public ResponseEntity fixUser(@RequestBody @Valid FixUserDTO user, @RequestHeader String email) {
         Common_Rsp rsp = new Common_Rsp();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
