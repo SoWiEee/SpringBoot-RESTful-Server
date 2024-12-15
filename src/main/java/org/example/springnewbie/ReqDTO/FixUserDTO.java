@@ -1,10 +1,12 @@
 package org.example.springnewbie.ReqDTO;
 
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class FixUserDTO {
     private String new_name;
     private String new_email;
+    @NotNull(message = "Invalid password: password is NULL")
     private String password;
 
     public String getName() { return new_name; }
