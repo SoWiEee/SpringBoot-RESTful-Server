@@ -2,8 +2,36 @@
 
 ## Dev Environment
 * [Java JDK 21](https://jdk.java.net/archive/)
-* [IntelliJ IDEA Community](https://www.jetbrains.com/idea/download/other.html)
-* [Java Spring](https://spring.io)
+* [IntelliJ IDEA Ultimate](https://www.jetbrains.com/idea/download/other.html)
+* [Java Spring Boot](https://spring.io)
+* [Vue](https://vuejs.org)
+* [Vite](https://vite.dev)
+* [Vuetify](https://vuetifyjs.com/en/)
+
+## File Directory
+```
+src/
+├── frontend/
+│   ├── src/
+│   │   ├── main.js
+│   │   ├── App.vue
+│   │   ├── components/
+│   │   └── router/
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+└── main/
+    ├── java/org/example/springnewbie/
+    │   ├── SpringNewbieApplication.java
+    │   ├── WebController.java
+    │   ├── Controller/
+    │   ├── DTO/
+    │   ├── Dao/
+    │   └── Service/
+    └── resources/
+        ├── static
+        └── application.properties
+```
 
 # API Documentation
 
