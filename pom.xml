@@ -113,18 +113,7 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-<!--                    <execution>-->
-<!--                        <id>install-node-and-yarn</id>-->
-<!--                        <goals>-->
-<!--                            <goal>install-node-and-npm</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <workingDirectory>${project.basedir}/frontend</workingDirectory>-->
-<!--                            <nodeVersion>v20.11.1</nodeVersion>-->
-<!--                            <yarnVersion>1.22.22</yarnVersion>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-                    <!-- install yarn -->
+
                     <!-- 執行 Yarn 打包 -->
                     <execution>
                         <id>yarn-build</id>
@@ -150,10 +139,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+                            <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/frontend/dist</directory>
+                                    <directory>${basedir}/frontend/dist</directory>
                                 </resource>
                             </resources>
                         </configuration>
