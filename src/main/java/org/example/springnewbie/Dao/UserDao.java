@@ -48,29 +48,48 @@ public class UserDao {
     }
 
     public UserDTO getUserByEmail(String email) {
-        String sql = "SELECT * FROM User WHERE email = :email";
+        try {
+            Connection conn = DriverManager.getConnection(CONNURL, username, password);
+            String sql = "SELECT * FROM User WHERE email = :email";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("email", email);
+            Map<String, Object> params = new HashMap<>();
+            params.put("email", email);
 
-        List<UserDTO> users = namedParameterJdbcTemplate.query(sql, params, UserRowMapper);
-        return users.isEmpty() ? null : users.getFirst();
+            List<UserDTO> users = namedParameterJdbcTemplate.query(sql, params, UserRowMapper);
+            return users.isEmpty() ? null : users.getFirst();
+        } catch(SQLException e) {
+            throw new RuntimeException("[X] Connect Database Failed", e);
+        }
+
     }
 
     public void fixUser(FixUserDTO userDTO) {
-        String sql = "UPDATE User SET name = :name, password = :password WHERE email = :email";
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", userDTO.getName());
-        params.put("password", userDTO.getPassword());
-        params.put("email", userDTO.getEmail());
-        namedParameterJdbcTemplate.update(sql, params);
+        try {
+            Connection conn = DriverManager.getConnection(CONNURL, username, password);
+
+            String sql = "UPDATE User SET name = :name, password = :password WHERE email = :email";
+            Map<String, Object> params = new HashMap<>();
+            params.put("name", userDTO.getName());
+            params.put("password", userDTO.getPassword());
+            params.put("email", userDTO.getEmail());
+            namedParameterJdbcTemplate.update(sql, params);
+        } catch(SQLException e) {
+            throw new RuntimeException("[X] Connect Database Failed", e);
+        }
+
     }
 
     public void deleteUser(String email) {
-        String sql = "DELETE FROM User WHERE email = :email";
-        Map<String, Object> params = new HashMap<>();
-        params.put("email", email);
-        namedParameterJdbcTemplate.update(sql, params);
+        try {
+            Connection conn = DriverManager.getConnection(CONNURL, username, password);
+            String sql = "DELETE FROM User WHERE email = :email";
+            Map<String, Object> params = new HashMap<>();
+            params.put("email", email);
+            namedParameterJdbcTemplate.update(sql, params);
+        } catch(SQLException e) {
+            throw new RuntimeException("[X] Connect Database Failed", e);
+        }
+
     }
 
     public static class UserRowMapper implements RowMapper<UserDTO> {
