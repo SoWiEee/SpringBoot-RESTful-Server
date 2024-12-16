@@ -2,9 +2,7 @@ package org.example.springnewbie.Service;
 
 import org.example.springnewbie.DTO.UserDTO;
 import org.example.springnewbie.Dao.UserDao;
-import org.example.springnewbie.Mapper.FixUserDTO_Mapper;
-import org.example.springnewbie.Mapper.GetUserDTO_Mapper;
-import org.example.springnewbie.Model.User;
+import org.example.springnewbie.ReqDTO.AddUserDTO;
 import org.example.springnewbie.ReqDTO.FixUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,24 +12,20 @@ public class UserService {
     @Autowired
     public UserDao userDao;
 
-    public void addUser(UserDTO userDTO) {
-        userDao.addUser(userDTO);
+    public void addUser(AddUserDTO dto) {
+        userDao.addUser(dto);
     }
 
-    public UserDTO getUserByEmail(String email){
-        GetUserDTO_Mapper mapper = new GetUserDTO_Mapper();
-        User user = userDao.getUserByEmail(email);
+    public UserDTO getUserByEmail(String email) {
+        UserDTO user = userDao.getUserByEmail(email);
         if(user == null){
             return null;
         }else{
-            UserDTO dto = mapper.Mapping(user);
-            return dto;
+            return user;
         }
     }
 
-    public void fixUser(FixUserDTO user) {
-        FixUserDTO_Mapper mapper = new FixUserDTO_Mapper();
-        UserDTO dto = mapper.Mapping(user);
+    public void fixUser(FixUserDTO dto) {
         userDao.fixUser(dto);
     }
 

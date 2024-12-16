@@ -1,7 +1,8 @@
 package org.example.springnewbie.Dao;
 
 import org.example.springnewbie.DTO.UserDTO;
-import org.example.springnewbie.Model.User;
+import org.example.springnewbie.ReqDTO.AddUserDTO;
+import org.example.springnewbie.ReqDTO.FixUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,33 +29,35 @@ public class UserDao {
     @Value("${spring.datasource.password}")
     private String password;
 
-    private final RowMapper<User> UserRowMapper = new UserRowMapper();
+    private final RowMapper<UserDTO> UserRowMapper = new UserRowMapper();
 
-    public void addUser(UserDTO userDTO) {
-        try{
+    public void addUser(AddUserDTO userDTO) {
+        try {
             Connection conn = DriverManager.getConnection(CONNURL, username, password);
+
             String sql = "INSERT INTO User(name, email, password) VALUES (:name, :email, :password)";
             Map<String, Object> params = new HashMap<>();
             params.put("name", userDTO.getName());
             params.put("email", userDTO.getEmail());
             params.put("password", userDTO.getPassword());
             namedParameterJdbcTemplate.update(sql, params);
-        }catch(SQLException e){
+
+        } catch(SQLException e) {
             throw new RuntimeException("[X] Connect Database Failed", e);
         }
     }
 
-    public User getUserByEmail(String email) {
+    public UserDTO getUserByEmail(String email) {
         String sql = "SELECT * FROM User WHERE email = :email";
 
         Map<String, Object> params = new HashMap<>();
         params.put("email", email);
 
-        List<User> users = namedParameterJdbcTemplate.query(sql, params, UserRowMapper);
+        List<UserDTO> users = namedParameterJdbcTemplate.query(sql, params, UserRowMapper);
         return users.isEmpty() ? null : users.getFirst();
     }
 
-    public void fixUser(UserDTO userDTO) {
+    public void fixUser(FixUserDTO userDTO) {
         String sql = "UPDATE User SET name = :name, password = :password WHERE email = :email";
         Map<String, Object> params = new HashMap<>();
         params.put("name", userDTO.getName());
@@ -70,14 +73,14 @@ public class UserDao {
         namedParameterJdbcTemplate.update(sql, params);
     }
 
-    public static class UserRowMapper implements RowMapper<User> {
+    public static class UserRowMapper implements RowMapper<UserDTO> {
         @Override
-        public User mapRow(ResultSet rs, int rowNum) throws SQLException{
-            User user = new User();
-            user.setName(rs.getString("name"));
-            user.setEmail(rs.getString("email"));
-            user.setPasswd(rs.getString("password"));
-            return user;
+        public UserDTO mapRow(ResultSet rs, int rowNum) throws SQLException{
+            UserDTO dto = new UserDTO();
+            dto.setName(rs.getString("name"));
+            dto.setEmail(rs.getString("email"));
+            dto.setPassword(rs.getString("password"));
+            return dto;
         }
     }
 }
