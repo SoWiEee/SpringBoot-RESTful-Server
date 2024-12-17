@@ -1,15 +1,18 @@
 <template>
-  <div id="app">
-    <nav>
-      <ul>
-        <li><router-link to="/add_user">Add User</router-link></li>
-        <li><router-link to="/get_user">Get User</router-link></li>
-        <li><router-link to="/fix_user">Fix User</router-link></li>
-        <li><router-link to="/delete_user">Delete User</router-link></li>
-      </ul>
-    </nav>
-    <router-view></router-view>
-  </div>
+  <v-app>
+    <v-app-bar app>
+      <v-toolbar-title>User Management</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <li><router-link to="/add_user">Add User</router-link></li>
+      <li><router-link to="/get_user">Get User</router-link></li>
+      <li><router-link to="/fix_user">Fix User</router-link></li>
+      <li><router-link to="/delete_user">Delete User</router-link></li>
+      <v-btn>Button</v-btn>
+    </v-app-bar>
+    <v-main>
+      <router-view></router-view>
+    </v-main>
+  </v-app>>
 </template>
 
 <script>
@@ -18,14 +21,3 @@ export default {
 };
 </script>
 
-<style>
-  nav ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  nav ul li {
-    display: inline;
-    margin-right: 10px;
-  }
-</style>

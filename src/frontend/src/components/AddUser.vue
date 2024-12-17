@@ -1,26 +1,16 @@
 <template>
-  <div>
-    <h1>Add User</h1>
-    <form @submit.prevent="addUser">
-      <div>
-        <label for="name">Name:</label>
-        <input v-model="name" type="text" id="name" required>
-      </div>
-      <div>
-        <label for="email">Email:</label>
-        <input v-model="email" type="email" id="email" required>
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input v-model="password" type="password" id="password" required>
-      </div>
-      <div>
-        <button type="submit">Add User</button>
-      </div>
-    </form>
-    <p v-if="message">{{ message }}</p>
-  </div>
+  <v-container>
+      <h1>Add User</h1>
+      <v-form @submit.prevent="addUser" ref="form">
+        <v-text-field v-model="name" label="Name" required></v-text-field>
+        <v-text-field v-model="email" label="Email" type="email" required></v-text-field>
+        <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
+        <v-btn type="submit" color="primary">Add User</v-btn>
+      </v-form>
+    <v-alert v-if="message" type="info">{{ message }}</v-alert>
+  </v-container>
 </template>
+
 
 <script>
 export default {
