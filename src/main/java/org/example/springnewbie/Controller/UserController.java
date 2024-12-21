@@ -138,8 +138,6 @@ public class UserController {
             rsp.SUCCESS();
         }
 
-        headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT");
-        headers.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie, Authorization, Custom-Header,token,priority,*");
         return new ResponseEntity<>(GSON.toJson(rsp), headers, HttpStatus.OK);
     }
 }
