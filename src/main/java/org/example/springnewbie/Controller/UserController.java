@@ -11,7 +11,6 @@ import org.example.springnewbie.ReqDTO.LoginUserDTO;
 import org.example.springnewbie.RspDTO.Common_Rsp;
 import org.example.springnewbie.RspDTO.GetUser_rsp;
 import org.example.springnewbie.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/user")
 public class UserController {
-//    @Autowired
-//    private UserService userService;
 
     private static final UserService userService = new UserService();
     private static final JwtToken TOKEN = new JwtToken();

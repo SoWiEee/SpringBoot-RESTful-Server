@@ -4,13 +4,12 @@ import org.example.springnewbie.DTO.UserDTO;
 import org.example.springnewbie.Dao.UserDao;
 import org.example.springnewbie.ReqDTO.AddUserDTO;
 import org.example.springnewbie.ReqDTO.FixUserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    @Autowired
-    public UserDao userDao;
+
+    private static final UserDao userDao = new UserDao();
 
     public void addUser(AddUserDTO dto) {
         userDao.addUser(dto);
