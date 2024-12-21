@@ -1,27 +1,23 @@
 package org.example.springnewbie;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 public class JwtToken {
-
-    // 簽發人
     private static final String ISS = "P3K0p3K0";
-    @Value("${token.SECRET}")
-    private String SECRET;
-
     private static final long EXPIRE_TIME = 60 * 60 * 1000;
+    SecretKey key = Jwts.SIG.HS256.key().build();
 
     public String generateToken(String username) {
         return Jwts.builder()
                 .subject(username)
+                .issuer(ISS)
                 .expiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .signWith(key)
                 .compact();
     }
 }
