@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
 
+    private static final UserService userService = new UserService();
+    private static final JwtToken TOKEN = new JwtToken();
     private static final Gson GSON = new Gson();
 
     @PostMapping("/post/login")
@@ -40,7 +42,7 @@ public class UserController {
         }else if(!tempUser.getPassword().equals(user.getPassword())) {
             rsp.PASSWD_INCORRECT();
         }else {
-            headers.set("token", JwtToken.generateToken(user.getName()));
+            headers.set("token", TOKEN.generateToken(user.getName()));
             rsp.SUCCESS();
         }
 
