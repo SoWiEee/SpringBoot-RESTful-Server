@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import jakarta.validation.Valid;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.example.springnewbie.DTO.UserDTO;
+import org.example.springnewbie.JwtToken;
 import org.example.springnewbie.ReqDTO.AddUserDTO;
 import org.example.springnewbie.ReqDTO.FixUserDTO;
+import org.example.springnewbie.ReqDTO.LoginUserDTO;
 import org.example.springnewbie.RspDTO.Common_Rsp;
 import org.example.springnewbie.RspDTO.GetUser_rsp;
 import org.example.springnewbie.Service.UserService;
@@ -24,6 +26,26 @@ public class UserController {
     private UserService userService;
 
     private static final Gson GSON = new Gson();
+
+    @PostMapping("/post/login")
+    public ResponseEntity login(@RequestBody @Valid LoginUserDTO user) {
+        Common_Rsp rsp = new Common_Rsp();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        UserDTO tempUser = userService.getUserByEmail(user.getEmail());
+
+        if(tempUser == null) {
+            rsp.USER_NOT_FOUND();
+        }else if(!tempUser.getPassword().equals(user.getPassword())) {
+            rsp.PASSWD_INCORRECT();
+        }else {
+            headers.set("token", JwtToken.generateToken(user.getName()));
+            rsp.SUCCESS();
+        }
+
+        return new ResponseEntity<>(GSON.toJson(rsp), headers, HttpStatus.OK);
+    }
 
     @PostMapping("/post/add_user")
     public ResponseEntity addUser(@RequestBody @Valid AddUserDTO req) {
@@ -53,26 +75,19 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         EmailValidator validator = EmailValidator.getInstance();
+        UserDTO user = userService.getUserByEmail(email);
 
         if (email == null || email.isEmpty()) {
             rsp.PARAMS_MISSING();
-            return new ResponseEntity<>(GSON.toJson(rsp), headers, HttpStatus.BAD_REQUEST);
-        }
-
-        if(!validator.isValid(email)){
+        }else if (!validator.isValid(email)){
             rsp.PARAMS_INCORRECT();
-            return new ResponseEntity<>(GSON.toJson(rsp), headers, HttpStatus.BAD_REQUEST);
-        }
-
-        UserDTO user = userService.getUserByEmail(email);
-
-        if (user == null) {
+        }else if (user == null) {
             rsp.EMAIL_NOT_FOUND();
-            return new ResponseEntity<>(GSON.toJson(rsp), headers, HttpStatus.NOT_FOUND);
+        }else{
+            rsp.SUCCESS();
+            rsp.setData(user);
         }
 
-        rsp.SUCCESS();
-        rsp.setData(user);
         return new ResponseEntity<>(GSON.toJson(rsp), headers, HttpStatus.OK);
     }
 
