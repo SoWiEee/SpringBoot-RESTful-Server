@@ -24,8 +24,4 @@ public class AddUserDTO {
         EmailValidator validator = EmailValidator.getInstance();
         return validator.isValid(email);
     }
-
-    public boolean isEmpty(){
-        return (name == null || email == null || password == null);
-    }
 }

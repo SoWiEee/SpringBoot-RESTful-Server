@@ -36,4 +36,8 @@ public class Common_Rsp {
         this.rsp_code = 40;
         this.rsp_msg = "Email not found";
     }
+    public void USER_NOT_FOUND() {
+        this.rsp_code = 40;
+        this.rsp_msg = "User not found";
+    }
 }

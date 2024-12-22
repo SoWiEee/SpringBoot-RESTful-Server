@@ -7,12 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class WebController {
 
     @GetMapping("/")
-    public String home() {
-        return "index";
-    }
-
-    @GetMapping("/api-reference")
-    public String apiReference() {
-        return "api-reference";
+    public String redirect() {
+        return "forward:/index.html";
     }
 }

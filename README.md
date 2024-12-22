@@ -2,23 +2,52 @@
 
 ## Dev Environment
 * [Java JDK 21](https://jdk.java.net/archive/)
-* [IntelliJ IDEA Community](https://www.jetbrains.com/idea/download/other.html)
-* [Java Spring](https://spring.io)
+* [IntelliJ IDEA Ultimate](https://www.jetbrains.com/idea/download/other.html)
+* [Java Spring Boot](https://spring.io)
+* [Vue](https://vuejs.org)
+* [Vite](https://vite.dev)
+* [Vuetify](https://vuetifyjs.com/en/)
+
+## File Directory
+```
+src/
+├── frontend/
+│   ├── src/
+│   │   ├── main.js
+│   │   ├── App.vue
+│   │   ├── components/
+│   │   └── router/
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+└── main/
+    ├── java/org/example/springnewbie/
+    │   ├── SpringNewbieApplication.java
+    │   ├── WebController.java
+    │   ├── Controller/
+    │   ├── DTO/
+    │   ├── Dao/
+    │   └── Service/
+    └── resources/
+        ├── static
+        └── application.properties
+```
 
 # API Documentation
 
-## POST /v1/user/post/user
-* Add a new user
+## User Management
+
+### 1. Add User
+> Add a new user
+* method：`POST`
+* path：`/v1/user/post/user`
 
 ### Request
-<b>Header</b>
-
-
 <b>Body</b>
 ```json
 {
   "name": "String",
-  "e-mail": "String",
+  "email": "String",
   "password": "Hashed String, SHA256"
 }
 ```
@@ -39,8 +68,10 @@
 | 31       | Missing parameters   |
 
 
-## GET /v1/user/get/get_user
-* Fetch a user info
+### 2. Fetch User
+> Fetch a user info
+* method：`GET`
+* path：`/v1/user/get/get_user`
 
 ### Request
 **Header**
@@ -68,10 +99,10 @@
 | 31       | Missing Parameters   |
 | 40       | Email not found      |
 
-
-
-## PUT /v1/user/put/fix_user
-* Update a user info
+### 3. Update User
+> Update a user info
+* method：`PUT`
+* path：`/v1/user/put/fix_user`
 
 ### Request
 **Header**
@@ -83,8 +114,8 @@
 ```json
 {
   "new_name": "String",
-  "new_e-mail": "String",
-  "password": "Hashed String, SHA256"
+  "new_email": "String",
+  "password": "Hashed String, SHA256 salted"
 }
 ```
 
@@ -105,10 +136,10 @@
 | 40       | Email not found      |
 | 50       | Incorrect Password   |
 
-
-
-## DELETE /v1/user/delete/delete_user
-* Delete a user
+### 4. Delete User
+> Delete a user
+* method：`DELETE`
+* path：`/v1/user/delete/delete_user`
 
 ### Request
 **Header**
