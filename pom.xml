@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pekomiko</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>SpringBoot-RESTful-Server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo</name>
     <description>The Best Server</description>
